@@ -6,10 +6,10 @@ import db
 1. How many users, activities and trackpoints are there in the dataset (after it is inserted into the database).
 """
 
-def length_of_data()
-print(f"All users: ", db.user.find())
-db.activity.find()
-db.trackpoint.find()
+def length_of_data():
+    print(f"All users: ", db.user.find())
+    db.activity.find()
+    db.trackpoint.find()
 
 """
 2. Find the average number of activities per user.

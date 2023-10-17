@@ -36,3 +36,4 @@ class DbConnector:
         self.client.close()
         print("\n-----------------------------------------------")
         print("Connection to %s-db is closed" % self.db.name)
+
