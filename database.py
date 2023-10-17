@@ -16,8 +16,8 @@ class DbConnector:
     def __init__(self,
                  DATABASE='geolife',
                  HOST="tdt4225-34.idi.ntnu.no",
-                 USER=os.getenv('DB_USER'),
-                 PASSWORD=os.getenv('DB_PASSWORD')):
+                 USER='mongoking',
+                 PASSWORD='kaffepause69'):
         uri = "mongodb://%s:%s@%s/%s?authSource=admin" % (USER, PASSWORD, HOST, DATABASE)
         # Connect to the databases
         try:
@@ -36,3 +36,4 @@ class DbConnector:
         self.client.close()
         print("\n-----------------------------------------------")
         print("Connection to %s-db is closed" % self.db.name)
+
