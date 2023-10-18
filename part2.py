@@ -2,6 +2,8 @@
 import time
 import copy
 import pandas as pd
+from haversine import haversine
+
 from database import DbConnector
 
 
@@ -25,6 +27,7 @@ class Part2:
         self.users_taken_taxi()
         self.count_activites_with_transportation()
         self.year_with_most_activities()
+        self.km_walked_in_2008_by_user_112()
 
     """
     Query 1: How many users, activities and trackpoints are there in the dataset (after it is inserted into the database).
@@ -41,10 +44,12 @@ class Part2:
     """
 
     def avg_activities_per_user(self):
-        sum_users = self.user_collection.count_documents({})
-        sum_activities = self.activity_collection.count_documents({})
-        avg_activities_per_user = sum_activities / sum_users
-        print("Query 2 - Average activities per user:", f"{avg_activities_per_user:.2f}")
+        pipeline = [
+            {'$group': {'_id': '$user_id', 'sum': {'$count': {}}}}, {
+                '$group': {'_id': 'null', 'avg': {'$avg': '$sum'}}}]
+
+        result = self.db.Activity.aggregate(pipeline)
+        print("Query 2 - Average activities per user:", f"{result:.2f}")
 
     """
     3. Find the top 20 users with the highest number of activities.
@@ -93,13 +98,14 @@ class Part2:
         ]
         result = list(self.activity_collection.aggregate(pipeline))
         print(
-            "Query 5: Find all types of transportation modes and count how many activities that are tagged with these transportation mode labels (except null transportation mode).")
+            "Query 5 - All types of transportation modes and the number of activities that are tagged with these transportation mode labels (except null transportation mode).")
         for row in result:
             print(f"{row['_id']}: {row['count']} ")
 
     """
     6. Find the year with the most activities. Is this also the year with most recorded hours?
     """
+
     def year_with_most_activities(self):
         # Query 6a
         pipeline = [{'$group': {'_id': {'$year': '$start_date_time'},
@@ -110,8 +116,7 @@ class Part2:
         activity_result = list(self.activity_collection.aggregate(pipeline))
         activity_year = activity_result[0]['_id']
         activity_count = activity_result[0]['count']
-        print(f"Most activities were recorded in {activity_year}, with {activity_count} activities")
-
+        print(f"Query 6a: Most activities were recorded in {activity_year}, with {activity_count} activities")
 
         # Query 6b
         pipeline_2 = [
@@ -128,7 +133,7 @@ class Part2:
         hours_year = hours_result[0]['_id']
         hours_sum = hours_result[0]['sum']
 
-        print(f"Most recorded hours were recorded in {hours_year} with {hours_sum:.2f} hours")
+        print(f"Query 6b: Most recorded hours were recorded in {hours_year} with {hours_sum:.2f} hours")
 
         if activity_year == hours_year:
             print(f"\nTherefore, {activity_year} was the year when most activities and hours were recorded.\n")
@@ -136,11 +141,56 @@ class Part2:
             print(f"\nThe activity when most activities were recorded was not the same as the year when most hours "
                   f"were recorded.")
 
-
-
     """
-    7. Findthetotaldistance(inkm)walkedin2008,byuserwithid=112.
+    7. Find the total distance (in km) walked in 2008, by user with id = 112.
     """
+
+    def km_walked_in_2008_by_user_112(self):
+        # Retrieve all activity-id's labeled 'walk' for user 112 in 2008
+        pipeline = ({"user_id": "112",
+                     "transportation_mode": "walk"}, {
+                        "_id": False,
+                        "id": True})
+
+        activities_result = self.db.Activity.find(pipeline)
+
+        activities_list = []
+        for activity in activities_result:
+            activities_list.append(activity['id'])
+
+        # Retrieve trackpoints for each activity id
+        pipeline_2 = ({
+                          "activity_id": {"$in": activities_list}},
+                      {
+                          "_id": False,
+                          "id": True,
+                          "activity_id": True,
+                          "lat": True,
+                          "lon": True
+                      })
+
+        trackpoints_list = list(self.db.TrackPoint.find(pipeline_2))
+
+        distance_in_km = 0
+        # Calculate the distance between each trackpoint
+        for i in range(len(trackpoints_list) - 1):
+            activity = trackpoints_list[i]['activity_id']
+            next_activity = trackpoints_list[i + 1]['activity_id']
+
+            # Only calculate trackpoints in the same activity
+            if activity != next_activity:
+                continue
+
+            lat1 = trackpoints_list[i]['lat']
+            lon1 = trackpoints_list[i]['lon']
+            lat2 = trackpoints_list[i + 1]['lat']
+            lon2 = trackpoints_list[i + 1]['lon']
+
+            # Calculate distance between the two points with haversine
+            distance_in_km += haversine((lat1, lon1), (lat2, lon2))
+
+        print("Query 7 - the total distance (in km) walked in 2008, by user with id = 112:", "\n")
+        print(f"{distance_in_km:.2f}")
 
     """
     8. Findthetop20userswhohavegainedthemostaltitudemeters.
