@@ -2,6 +2,7 @@
 import time
 import copy
 import pandas as pd
+from datetime import datetime
 from haversine import haversine
 
 from database import DbConnector
@@ -296,11 +297,11 @@ class Part2:
             if user_id not in invalid_user_activities:
                 invalid_user_activities[user_id] = set()
 
-            trackpoints['date_time'] = pd.to_datetime(trackpoints['date_time'])
-
             date_time_1 = trackpoints[index]['date_time']
             date_time_2 = trackpoints[index + 1]['date_time']
             
+            date_time_1 = datetime.strptime(date_time_1, '%Y-%m-%d %H:%M:%S')
+            date_time_2 = datetime.strptime(date_time_2, '%Y-%m-%d %H:%M:%S')
 
             delta_date_time = date_time_2 - date_time_1
             if delta_date_time.seconds > 60 * 5:
