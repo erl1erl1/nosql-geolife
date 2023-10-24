@@ -20,18 +20,24 @@ class Part2:
         self.activity_collection = self.db['activity']
         self.tp_collection = self.db['trackpoint']
 
-    def execute_tasks(self):
-        """self.sum_of_collections()
-        self.avg_activities_per_user()
-        self.top_20_users()
-        self.users_taken_taxi()
-        self.count_activites_with_transportation()
-        self.year_with_most_activities()
-        self.km_walked_in_2008_by_user_112()"""
-        #self.top_20_users_with_most_altitude_meters()
-        #self.users_with_invalid_activities()
-        self.users_with_activity_in_beijing()
-        self.user_transportation_mode()
+    def execute_tasks(self, task_nums: int or range[int] or list[int]):
+        """
+            Executes specified tasks based on provided task numbers.
+
+            :param task_nums: An integer, range, or list of integers representing the task numbers
+                              to be executed.
+            """
+        tasks = [self.sum_of_collections, self.avg_activities_per_user, self.top_20_users,
+                 self.users_taken_taxi, self.count_activites_with_transportation, self.year_with_most_activities,
+                 self.km_walked_in_2008_by_user_112, self.top_20_users_with_most_altitude_meters,
+                 self.users_with_invalid_activities, self.users_with_activity_in_beijing,
+                 self.user_transportation_mode]
+
+        if isinstance(task_nums, int):
+            task_nums = [task_nums]
+
+        for num in task_nums:
+            tasks[num - 1]()
 
     """
     Query 1: How many users, activities and trackpoints are there in the dataset (after it is inserted into the database).
