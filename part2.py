@@ -21,15 +21,15 @@ class Part2:
         self.tp_collection = self.db['trackpoint']
 
     def execute_tasks(self):
-        self.sum_of_collections()
+        """self.sum_of_collections()
         self.avg_activities_per_user()
         self.top_20_users()
         self.users_taken_taxi()
         self.count_activites_with_transportation()
         self.year_with_most_activities()
-        #self.km_walked_in_2008_by_user_112()
-        self.top_20_users_with_most_altitude_meters()
-        self.users_with_invalid_activities()
+        self.km_walked_in_2008_by_user_112()"""
+        #self.top_20_users_with_most_altitude_meters()
+        #self.users_with_invalid_activities()
         self.users_with_activity_in_beijing()
         self.user_transportation_mode()
 
@@ -152,11 +152,12 @@ class Part2:
 
     def km_walked_in_2008_by_user_112(self):
         # Retrieve all activity-id's labeled 'walk' for user 112 in 2008
-        pipeline = [{"user_id": "112",
-                     "transportation_mode": "walk"}, {
-                        "_id": False,
-                        "id": True}]
-        activities_result = self.db.activity_collection.find(pipeline)
+        query = {"user_id": "112",
+                 "transportation_mode": "walk"}
+        projection = {"_id": 0,
+                  "id": 1}
+
+        activities_result = self.activity_collection.find(query, projection)
 
         activities_list = []
         for activity in activities_result:
@@ -173,7 +174,7 @@ class Part2:
                           "lon": True
                       })
 
-        trackpoints_list = list(self.db.tp_collection.find(pipeline_2))
+        trackpoints_list = list(self.tp_collection.find(pipeline_2[0], pipeline_2[1]))
 
         distance_in_km = 0
         # Calculate the distance between each trackpoint
@@ -210,7 +211,7 @@ class Part2:
             'activity_id': True,
             'altitude': True
         }
-        result = self.db.tp_collection.find({}, pipeline)
+        result = self.tp_collection.find({}, pipeline)
 
         trackpoint_alt = list(result)
 
@@ -269,7 +270,7 @@ class Part2:
             'date_time': True
         }
 
-        result = self.db.tp_collection.find({}, pipeline)
+        result = self.tp_collection.find({}, pipeline)
         trackpoints = list(result)
         invalid_user_activities = dict()
 
@@ -326,7 +327,7 @@ class Part2:
             '_id': '$user_id',
         }}]
 
-        result = self.db.tp_collection.aggregate(pipeline)
+        result = self.tp_collection.aggregate(pipeline[0], pipeline[1])
 
         results = []
 
@@ -355,7 +356,7 @@ class Part2:
             'user_id': True,
             'transportation_mode': True
         }
-        result = self.db.activity_collection.find(pipeline)
+        result = self.activity_collection.find(pipeline)
 
         activities = list(result)
         user_mode = dict()
