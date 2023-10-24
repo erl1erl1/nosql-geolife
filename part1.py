@@ -19,7 +19,6 @@ class Part1:
         self.user_collection = self.database['user']
         self.activity_collection = self.database['activity']
         self.tp_collection = self.database['trackpoint']
-        
 
     def push_buffers_to_db(self, activity_buffer, trackpoint_buffer, num_activities, num_trackpoints):
         """
@@ -99,4 +98,4 @@ class Part1:
     def drop_collections(self):
         self.user_collection.drop()
         self.activity_collection.drop()
-        self.tp_collection.drop()
+        self.tp_collection.drop()g
