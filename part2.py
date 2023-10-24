@@ -52,7 +52,7 @@ class Part2:
             {'$group': {'_id': '$user_id', 'sum': {'$count': {}}}}, {
                 '$group': {'_id': 'null', 'avg': {'$avg': '$sum'}}}]
 
-        result = self.db.Activity.aggregate(pipeline)
+        result = self.activity_collection.aggregate(pipeline)
         print("Query 2 - Average activities per user:", f"{result}")
 
     """
@@ -290,8 +290,11 @@ class Part2:
             if user_id not in invalid_user_activities:
                 invalid_user_activities[user_id] = set()
 
+            trackpoints['date_time'] = pd.to_datetime(trackpoints['date_time'])
+
             date_time_1 = trackpoints[index]['date_time']
             date_time_2 = trackpoints[index + 1]['date_time']
+            
 
             delta_date_time = date_time_2 - date_time_1
             if delta_date_time.seconds > 60 * 5:
@@ -327,7 +330,7 @@ class Part2:
             '_id': '$user_id',
         }}]
 
-        result = self.tp_collection.aggregate(pipeline[0], pipeline[1])
+        result = self.tp_collection.aggregate(pipeline)
 
         results = []
 
@@ -356,7 +359,7 @@ class Part2:
             'user_id': True,
             'transportation_mode': True
         }
-        result = self.activity_collection.find(pipeline)
+        result = self.activity_collection.find(pipeline[0], pipeline[1])
 
         activities = list(result)
         user_mode = dict()
