@@ -98,4 +98,4 @@ class Part1:
     def drop_collections(self):
         self.user_collection.drop()
         self.activity_collection.drop()
-        self.tp_collection.drop()g
+        self.tp_collection.drop()
