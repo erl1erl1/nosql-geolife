@@ -99,10 +99,10 @@ class Part1:
         """
         Execute the database operations.
         """
+        self.drop_collections()
         data_path = './dataset/dataset/Data'
         labeled_ids = read_file_to_list('./dataset/dataset/labeled_ids.txt')
         self.insert_data(data_path, labeled_ids, insert_threshold=325 * 10e2)
-        #self.drop_collections()
         self.connector.close_connection()
 
     def drop_collections(self):
