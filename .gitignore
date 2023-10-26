@@ -2,4 +2,8 @@
 problem_text.pdf
 .env
 /dataset
+<<<<<<< HEAD
 /dataset1
+=======
+.idea
+>>>>>>> 417c40dc096622f421952317ce9ae91b8d48a13d
