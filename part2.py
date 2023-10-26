@@ -53,22 +53,6 @@ class Part2:
     """
     2. Find the average number of activities per user.
     """
-    """
-    def avg_activities_per_user(self):
-        pipeline = [
-            {'$group': {'_id': '$user_id', 'sum': {'$count': {}}}},
-            {'$group': {'_id': None, 'avg': {'$avg': '$sum'}}}
-        ]
-        result = list(self.activity_collection.aggregate(pipeline))
-        print("Query 2 - Average activities per user:", result)
-
-        missing_users_count = self.activity_collection.count_documents({"user_id": None})
-        print("Activities with missing user_id:", missing_users_count)
-
-        unique_users_count = len(self.activity_collection.distinct("user_id"))
-        print("Unique users:", unique_users_count)
-        
-    """
 
     def avg_activities_per_user(self):
 
