@@ -37,3 +37,9 @@ class DbConnector:
         print("\n-----------------------------------------------")
         print("Connection to %s-db is closed" % self.db.name)
 
+    def insert(batch: list[dict], collection):
+        if 'meta' in batch[0].keys():
+                for row in batch:
+                    del row['meta']
+        
+        collection.insert_many(batch)

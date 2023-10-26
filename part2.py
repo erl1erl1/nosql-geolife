@@ -2,6 +2,7 @@
 import time
 import copy
 import pandas as pd
+from datetime import datetime
 from haversine import haversine
 
 from database import DbConnector
@@ -58,7 +59,6 @@ class Part2:
             {'$group': {'_id': '$user_id', 'sum': {'$sum': 1}}},
             {'$group': {'_id': None, 'avg': {'$avg': '$sum'}}}
         ]
-
         result = list(self.activity_collection.aggregate(pipeline))
         print("Query 2 - Average activities per user:", result)
 
@@ -305,6 +305,9 @@ class Part2:
 
             date_time_1 = trackpoints[index]['date_time']
             date_time_2 = trackpoints[index + 1]['date_time']
+            
+            date_time_1 = datetime.strptime(date_time_1, '%Y-%m-%d %H:%M:%S')
+            date_time_2 = datetime.strptime(date_time_2, '%Y-%m-%d %H:%M:%S')
 
             delta_date_time = date_time_2 - date_time_1
             if delta_date_time.seconds > 60 * 5:
@@ -340,7 +343,7 @@ class Part2:
             '_id': '$user_id',
         }}]
 
-        result = self.tp_collection.aggregate(pipeline[0], pipeline[1])
+        result = self.tp_collection.aggregate(pipeline)
 
         results = []
 
@@ -369,7 +372,7 @@ class Part2:
             'user_id': True,
             'transportation_mode': True
         }
-        result = self.activity_collection.find(pipeline)
+        result = self.activity_collection.find(pipeline[0], pipeline[1])
 
         activities = list(result)
         user_mode = dict()

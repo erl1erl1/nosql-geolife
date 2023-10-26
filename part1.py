@@ -20,6 +20,13 @@ class Part1:
         self.activity_collection = self.database['activity']
         self.tp_collection = self.database['trackpoint']
 
+    def delete_meta(self, batch: list[dict]):
+        if 'meta' in batch[0].keys():
+                for row in batch:
+                    del row['meta']
+        return batch
+        
+
     def push_buffers_to_db(self, activity_buffer, trackpoint_buffer, num_activities, num_trackpoints):
         """
         Push processed activities and trackpoints to the database.
@@ -33,7 +40,7 @@ class Part1:
         print(f'\nInserting: {num_activities} activities and {num_trackpoints} trackpoints')
 
         # Insert activities
-        self.activity_collection.insert_many(activity_buffer)
+        self.activity_collection.insert_many(self.delete_meta(activity_buffer))
         activity_buffer.clear()
 
         # Insert trackpoints
@@ -51,9 +58,12 @@ class Part1:
         :param labeled_ids: A list of labeled IDs.
         :param insert_threshold: The threshold for batch insertion.
         """
+        self.drop_collections() # Remove collections in db before insertion
         start_time = time.time()
         users_rows = process_users(path=data_path, labeled_ids=labeled_ids)
-        self.user_collection.insert_many(copy.deepcopy(users_rows))
+        users_row_copy = copy.deepcopy(users_rows)
+        users_row_copy = self.delete_meta(users_row_copy)
+        self.user_collection.insert_many(users_row_copy)
         num_users = len(users_rows)
         print(f"Inserted {num_users} users into User\n")
 
@@ -71,7 +81,7 @@ class Part1:
                 activity_buffer.append(activity)
 
                 for _, trackpoint_row in trackpoints_df.iterrows():
-                    trackpoint = process_trackpoint(activity['id'], trackpoint_row)
+                    trackpoint = process_trackpoint(activity['id'], trackpoint_row, user_row["id"])
                     trackpoint_buffer.append(trackpoint)
 
                 num_activities, num_trackpoints = len(activity_buffer), len(trackpoint_buffer)

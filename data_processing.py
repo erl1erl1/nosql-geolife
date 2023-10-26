@@ -98,7 +98,7 @@ def process_activity(user_row: dict, activity_row: dict) -> tuple:
     return activity_row, trackpoints_df
 
 
-def process_trackpoint(activity_id: int, trackpoint_row: pd.Series) -> dict:
+def process_trackpoint(activity_id: int, trackpoint_row: pd.Series, user_id: str) -> dict:
     """
     Processes a trackpoint and returns the trackpoint data.
 
@@ -112,5 +112,6 @@ def process_trackpoint(activity_id: int, trackpoint_row: pd.Series) -> dict:
         'lon': trackpoint_row['lon'],
         'altitude': trackpoint_row['alt'] if trackpoint_row['alt'] != -777 else None,
         'date_days': trackpoint_row['date'],
-        'date_time': trackpoint_row['date_str'] + " " + trackpoint_row['time_str']
+        'date_time': trackpoint_row['date_str'] + " " + trackpoint_row['time_str'],
+        'user_id': user_id
     }
