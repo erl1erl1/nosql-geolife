@@ -20,7 +20,7 @@ class Part2:
         self.activity_collection = self.db['activity']
         self.tp_collection = self.db['trackpoint']
 
-    def execute_tasks(self, task_nums: int or range[int] or list[int]):
+    def execute_tasks(self, task_nums: int or list[int]):
         """
             Executes specified tasks based on provided task numbers.
 
@@ -55,11 +55,18 @@ class Part2:
 
     def avg_activities_per_user(self):
         pipeline = [
-            {'$group': {'_id': '$user_id', 'sum': {'$count': {}}}}, {
-                '$group': {'_id': 'null', 'avg': {'$avg': '$sum'}}}]
+            {'$group': {'_id': '$user_id', 'sum': {'$sum': 1}}},
+            {'$group': {'_id': None, 'avg': {'$avg': '$sum'}}}
+        ]
 
-        result = self.db.Activity.aggregate(pipeline)
-        print("Query 2 - Average activities per user:", f"{result}")
+        result = list(self.activity_collection.aggregate(pipeline))
+        print("Query 2 - Average activities per user:", result)
+
+        missing_users_count = self.activity_collection.count_documents({"user_id": None})
+        print("Activities with missing user_id:", missing_users_count)
+
+        unique_users_count = len(self.activity_collection.distinct("user_id"))
+        print("Unique users:", unique_users_count)
 
     """
     3. Find the top 20 users with the highest number of activities.
