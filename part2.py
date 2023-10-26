@@ -2,11 +2,43 @@
 import time
 import copy
 import pandas as pd
+from tabulate import tabulate
 from datetime import datetime
 from haversine import haversine
 
 from database import DbConnector
+def print_question(task_num: int, question_text: str):
+    """
+    Prints task introduction.
+    Args:
+        task_num: number of the task
+        question_text: Text to display
+    """
+    print(f'Task {task_num}:')
+    print(question_text)
+    print("Querying... Please wait.", end='')
 
+
+def print_result(result_df: pd.DataFrame or dict[str, list], floatfmt=".0f", filename=None):
+    """
+    Tabulates and prints the result table of a query
+    Args:
+        result_df: result table from query as Dataframe or dictionary of lists
+        floatfmt: decimal precision
+        filename: name of file to write the result table to. Omit to avoid writing to file.
+
+    Returns:
+
+    """
+    print('\r', end='')
+
+    display = tabulate(result_df, headers='keys', tablefmt='grid', floatfmt=floatfmt, showindex=False)
+    print(display + "\n")
+
+    # Write to file if given
+    if filename:
+        with open(f'task_outputs/{filename}.txt', 'w') as f:
+            f.write(display)
 
 class Part2:
     def __init__(self):
@@ -45,16 +77,22 @@ class Part2:
     """
 
     def sum_of_collections(self):
-        print("Query 1 - Total number of users, activites and trackpoints in the dataset: ")
-        print(f"Total users: ", self.user_collection.count_documents({}))
-        print(f"Total activities: ", self.activity_collection.count_documents({}))
-        print(f"Total trackpoints: ", self.tp_collection.count_documents({}))
+        print_question(task_num=1,
+                       question_text="How many users, activities and trackpoints are there in the dataset "
+                                     "(after it is inserted into the database)?")
+
+        result = {'Number of Users': [self.user_collection.count_documents({})],
+                  'Number of Activities': [self.activity_collection.count_documents({})],
+                  'Number of TrackPoints': [self.tp_collection.count_documents({})]}
+
+        print_result(result_df=result, filename=f"task_{1}")
 
     """
     2. Find the average number of activities per user.
     """
 
     def avg_activities_per_user(self):
+        print_question(task_num=2, question_text="Find the average number of activities per user.")
 
         # Count total users
         total_users = self.user_collection.count_documents({})
@@ -79,14 +117,17 @@ class Part2:
             avg_activities_per_user = total_activities / total_users
         else:
             avg_activities_per_user = 0
+        
+        result = {"Average activities per user": [avg_activities_per_user]}
 
-        print(avg_activities_per_user)
+        print_result(result_df=result, filename=f"task_2")
 
     """
     3. Find the top 20 users with the highest number of activities.
     """
 
     def top_20_users(self):
+        print_question(task_num=3, question_text="Top 20 users with the highest number of activities.")
         # Aggregate data to get the count of activities per user, sort them, and limit to top 20
         pipeline = [
             {"$group": {"_id": "$user_id", "count": {"$sum": 1}}},
@@ -95,16 +136,17 @@ class Part2:
         ]
         result = list(self.activity_collection.aggregate(pipeline))
 
-        # Print the result
-        print("Query 3 - Top 20 users with the highest number of activities:")
-        for rank, user in enumerate(result):
-            print(f"Rank {rank + 1}: User {user['_id']} has {user['count']} activities")
+        df = pd.DataFrame(result)
+        df.rename({"_id": "User ID", "count":"Count"}, inplace=True, axis=1)
+        print("")
+        print_result(result_df=df, filename=f"task_3")
 
     """
     4. Find all users who have taken a taxi.
     """
 
     def users_taken_taxi(self):
+        print_question(task_num=4, question_text="Find all users who have taken a taxi.")
         pipeline = [
             {'$match': {'transportation_mode': 'taxi'}},
             {'$group': {'_id': '$user_id'}},
@@ -112,8 +154,9 @@ class Part2:
         ]
         result = list(self.activity_collection.aggregate(pipeline))
         print(f"Query 4 - Users who have taken a taxi:")
-        for user in result:
-            print(f"User {user['_id']}")
+        df = pd.DataFrame(result)
+        df.rename({"_id": "User ID"}, inplace=True, axis=1)
+        print_result(result_df=df, filename="task_4")
 
     """
     5. Find all types of transportation modes and count how many activities that are
@@ -123,21 +166,25 @@ class Part2:
 
     def count_activites_with_transportation(self):
         pipeline = [
-            {'$match': {'transportation_mode': {'$ne': ''}}},
+            {'$match': {'transportation_mode': {'$ne': None}}},
             {'$group': {'_id': '$transportation_mode', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}}
         ]
         result = list(self.activity_collection.aggregate(pipeline))
-        print(
-            "Query 5 - All types of transportation modes and the number of activities that are tagged with these transportation mode labels (except null transportation mode).")
+        print_question(task_num=5,
+            question_text="All types of transportation modes and the number of activities that are tagged with thesetransportation mode labels (except null transportation mode).")
         for row in result:
             print(f"{row['_id']}: {row['count']} ")
+        df = pd.DataFrame(result)
+        df.rename({"_id": "Transportation Mode", "count": "Count"}, inplace=True, axis=1)
+        print_result(result_df=df, filename="task_5")
 
     """
     6. Find the year with the most activities. Is this also the year with most recorded hours?
     """
 
     def year_with_most_activities(self):
+        print_question(task_num=6, question_text=f"A: Most activities recorded in a year.")
         # Query 6a
         pipeline = [{'$group': {'_id': {'$year': '$start_date_time'},
                                 'count': {'$sum': 1}}},
@@ -147,8 +194,12 @@ class Part2:
         activity_result = list(self.activity_collection.aggregate(pipeline))
         activity_year = activity_result[0]['_id']
         activity_count = activity_result[0]['count']
-        print(f"Query 6a: Most activities were recorded in {activity_year}, with {activity_count} activities")
-
+        result = {
+            "Year": [activity_year],
+            "Activities": [activity_count]
+        }
+        print("")
+        print_result(result_df=result, filename="task_6a")
         # Query 6b
         pipeline_2 = [
             {'$group': {'_id': {'$year': '$start_date_time'},
@@ -165,12 +216,19 @@ class Part2:
         hours_year = hours_result[0]['_id']
         hours_sum = hours_result[0]['sum']
 
-        print(f"Query 6b: Most recorded hours were recorded in {hours_year} with {hours_sum:.2f} hours")
+        print_question(task_num=6, question_text=f"B: Most recorded hours were recorded in hours.")
+
+        result = {
+            "Year": [hours_year],
+            "Hours": [hours_sum]
+        }
+        print("")
+        print_result(result_df=result, filename="6b")
 
         if activity_year == hours_year:
             print(f"\nTherefore, {activity_year} was the year when most activities and hours were recorded.\n")
         else:
-            print(f"\nThe activity when most activities were recorded was not the same as the year when most hours "
+            print(f"\nThe year when most activities were recorded was not the same as the year when most hours "
                   f"were recorded.")
 
     """

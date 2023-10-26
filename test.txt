@@ -1,0 +1,58 @@
+Query 1 - Total number of users, activites and trackpoints in the dataset: 
+Total users:  182
+Total activities:  16048
+Total trackpoints:  9681756
+Query 2 - Average activities per user: <pymongo.command_cursor.CommandCursor object at 0x11eed0390>
+Query 3 - Top 20 users with the highest number of activities:
+Rank 1: User 128 has 2102 activities
+Rank 2: User 153 has 1793 activities
+Rank 3: User 025 has 715 activities
+Rank 4: User 163 has 704 activities
+Rank 5: User 062 has 691 activities
+Rank 6: User 144 has 563 activities
+Rank 7: User 041 has 399 activities
+Rank 8: User 085 has 364 activities
+Rank 9: User 004 has 346 activities
+Rank 10: User 140 has 345 activities
+Rank 11: User 167 has 320 activities
+Rank 12: User 068 has 280 activities
+Rank 13: User 017 has 265 activities
+Rank 14: User 003 has 261 activities
+Rank 15: User 014 has 236 activities
+Rank 16: User 126 has 215 activities
+Rank 17: User 030 has 210 activities
+Rank 18: User 112 has 208 activities
+Rank 19: User 011 has 201 activities
+Rank 20: User 039 has 198 activities
+Query 4 - Users who have taken a taxi:
+User 010
+User 058
+User 062
+User 078
+User 080
+User 085
+User 098
+User 111
+User 128
+User 163
+Query 5 - All types of transportation modes and the number of activities that are tagged with these transportation mode labels (except null transportation mode).
+None: 14510 
+walk: 481 
+car: 419 
+bike: 262 
+bus: 199 
+subway: 133 
+taxi: 37 
+airplane: 3 
+train: 2 
+boat: 1 
+run: 1 
+Query 6a: Most activities were recorded in 2008, with 5895 activities
+Query 6b: Most recorded hours were recorded in 2009 with 11612.42 hours
+
+The activity when most activities were recorded was not the same as the year when most hours were recorded.
+Query 7 - the total distance (in km) walked in 2008, by user with id = 112: 
+
+115.47
+Query 8 - Top 20 users who have gained the most altitude meters:
+[[1, '128', 243110], [2, '041', 132034], [3, '140', 81930], [4, '092', 31397], [5, '115', 26458], [6, '144', 17089], [7, '030', 12034], [8, '166', 8569], [9, '065', 8448], [10, '044', 4236], [11, '111', 4199], [12, '015', 3443], [13, '028', 2520], [14, '174', 2375], [15, '152', 1546], [16, '123', 1244], [17, '145', 995], [18, '114', 988], [19, '099', 879], [20, '069', 761]]
