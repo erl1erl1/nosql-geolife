@@ -53,10 +53,10 @@ class Part2:
     """
     2. Find the average number of activities per user.
     """
-
+    """
     def avg_activities_per_user(self):
         pipeline = [
-            {'$group': {'_id': '$user_id', 'sum': {'$sum': 1}}},
+            {'$group': {'_id': '$user_id', 'sum': {'$count': {}}}},
             {'$group': {'_id': None, 'avg': {'$avg': '$sum'}}}
         ]
         result = list(self.activity_collection.aggregate(pipeline))
@@ -67,6 +67,36 @@ class Part2:
 
         unique_users_count = len(self.activity_collection.distinct("user_id"))
         print("Unique users:", unique_users_count)
+        
+    """
+
+    def avg_activities_per_user(self):
+
+        # Count total users
+        total_users = self.user_collection.count_documents({})
+
+        user_pipeline = [
+            {'$lookup': {
+                'from': 'activity',
+                'localField': 'id',
+                'foreignField': 'user_id',
+                'as': 'activities'
+            }},
+            {'$project': {
+                'activity_count': {'$size': '$activities'}
+            }}
+        ]
+        users_activities = list(self.user_collection.aggregate(user_pipeline))
+
+        # Calculate average activities per user
+        total_activities = sum(user_activity['activity_count'] for user_activity in users_activities)
+
+        if total_users > 0:
+            avg_activities_per_user = total_activities / total_users
+        else:
+            avg_activities_per_user = 0
+
+        print(avg_activities_per_user)
 
     """
     3. Find the top 20 users with the highest number of activities.
@@ -365,7 +395,7 @@ class Part2:
     def user_transportation_mode(self):
         pipeline = {
             'transportation_mode': {
-                '$ne': ''
+                '$ne': None
             }
         }, {
             '_id': False,
@@ -375,6 +405,7 @@ class Part2:
         result = self.activity_collection.find(pipeline[0], pipeline[1])
 
         activities = list(result)
+        #print(activities)
         user_mode = dict()
 
         for activity in activities:
@@ -390,7 +421,7 @@ class Part2:
                 user_mode[user_id][transportation_mode] = 0
 
             # Count each transportation mode
-            user_mode[user_id][transportation_mode] += 1
+            #user_mode[user_id][transportation_mode] += 1
 
         # Sort the dictionary
         user_mode_sorted = sorted(user_mode.items())
@@ -399,7 +430,7 @@ class Part2:
 
         for user_id, transportation_modes in user_mode_sorted:
             transportation_mode = max(transportation_modes, key=transportation_modes.get)
-            results.append([user_id, transportation_mode, transportation_modes[transportation_mode]])
+            results.append([user_id, transportation_mode])
 
         print("Query 11 - Users with transportation mode registered and their most used transportation mode:")
         print(results)
