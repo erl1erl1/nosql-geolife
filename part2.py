@@ -3,7 +3,7 @@ import time
 import copy
 import pandas as pd
 from tabulate import tabulate
-from datetime import datetime
+import datetime
 from haversine import haversine
 
 from database import DbConnector
@@ -238,7 +238,10 @@ class Part2:
     def km_walked_in_2008_by_user_112(self):
         # Retrieve all activity-id's labeled 'walk' for user 112 in 2008
         query = {"user_id": "112",
-                 "transportation_mode": "walk"}
+                 "transportation_mode": "walk",
+                 "start_date_time": {"$gte": datetime.datetime(2008, 1, 1, 0, 0, 0)},
+                 "end_date_time": {"$lt": datetime.datetime(2009, 1, 1, 0, 0, 0)}
+                 }
         projection = {"_id": 0,
                   "id": 1}
 
