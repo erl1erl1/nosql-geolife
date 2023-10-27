@@ -3,7 +3,7 @@ import time
 import copy
 import pandas as pd
 from tabulate import tabulate
-import datetime
+from datetime import datetime
 from haversine import haversine
 
 from database import DbConnector
@@ -120,7 +120,7 @@ class Part2:
         
         result = {"Average activities per user": [avg_activities_per_user]}
 
-        print_result(result_df=result, filename=f"task_2")
+        print_result(result_df=result, filename=f"task_2", floatfmt=".2f")
 
     """
     3. Find the top 20 users with the highest number of activities.
@@ -165,16 +165,14 @@ class Part2:
     """
 
     def count_activites_with_transportation(self):
+        print_question(task_num=5,
+            question_text="All types of transportation modes and the number of activities that are tagged with thesetransportation mode labels (except null transportation mode).")
         pipeline = [
             {'$match': {'transportation_mode': {'$ne': None}}},
             {'$group': {'_id': '$transportation_mode', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}}
         ]
         result = list(self.activity_collection.aggregate(pipeline))
-        print_question(task_num=5,
-            question_text="All types of transportation modes and the number of activities that are tagged with thesetransportation mode labels (except null transportation mode).")
-        for row in result:
-            print(f"{row['_id']}: {row['count']} ")
         df = pd.DataFrame(result)
         df.rename({"_id": "Transportation Mode", "count": "Count"}, inplace=True, axis=1)
         print_result(result_df=df, filename="task_5")
@@ -223,7 +221,7 @@ class Part2:
             "Hours": [hours_sum]
         }
         print("")
-        print_result(result_df=result, filename="6b")
+        print_result(result_df=result, filename="task_6b")
 
         if activity_year == hours_year:
             print(f"\nTherefore, {activity_year} was the year when most activities and hours were recorded.\n")
@@ -236,11 +234,12 @@ class Part2:
     """
 
     def km_walked_in_2008_by_user_112(self):
+        print_question(task_num=7, question_text="Total distance (in km) walked in 2008, by user with id = 112:")
         # Retrieve all activity-id's labeled 'walk' for user 112 in 2008
         query = {"user_id": "112",
                  "transportation_mode": "walk",
-                 "start_date_time": {"$gte": datetime.datetime(2008, 1, 1, 0, 0, 0)},
-                 "end_date_time": {"$lt": datetime.datetime(2009, 1, 1, 0, 0, 0)}
+                 "start_date_time": {"$gte": datetime(2008, 1, 1, 0, 0, 0)},
+                 "end_date_time": {"$lt": datetime(2009, 1, 1, 0, 0, 0)}
                  }
         projection = {"_id": 0,
                   "id": 1}
@@ -281,9 +280,11 @@ class Part2:
 
             # Calculate distance between the two points with haversine
             distance_in_km += haversine((lat_1, lon_1), (lat_2, lon_2))
-
-        print("Query 7 - the total distance (in km) walked in 2008, by user with id = 112:", "\n")
-        print(f"{distance_in_km:.2f}")
+        result = {
+            "Distance (km)": [distance_in_km]
+        }
+        print("")
+        print_result(result_df=result, filename="task_7", floatfmt=".2f")
 
     """
     8. Find the top 20 users who have gained the most altitude meters.
@@ -293,6 +294,7 @@ class Part2:
     """
 
     def top_20_users_with_most_altitude_meters(self):
+        print_question(task_num=8, question_text="Top 20 users who have gained the most altitude meters:")
         pipeline = {
             '_id': False,
             'user_id': True,
@@ -340,10 +342,10 @@ class Part2:
         results = []
 
         for i, (user_id, alt) in enumerate(user_alt_array[:20]):
-            results.append([i + 1, user_id, round(alt)])
+            results.append([user_id, float(alt)])
 
-        print(f"Query 8 - Top 20 users who have gained the most altitude meters:")
-        print(results)
+        df = pd.DataFrame(results, columns=["User ID", "Altitude gained (m)"])
+        print_result(result_df=df, filename="task_8", floatfmt=".2f")
 
     """
     9. Find all users who have invalid activities,and the number of invalid activities per user
@@ -351,6 +353,7 @@ class Part2:
     """
 
     def users_with_invalid_activities(self):
+        print_question(task_num=9, question_text="Users with invalid activities and the number of invalid activities:")
         pipeline = {
             '_id': False,
             'user_id': True,
@@ -396,8 +399,11 @@ class Part2:
         for user_id, activities in invalid_activities:
             results.append([user_id, len(activities)])
 
-        print("Query 9 - Users with invalid activities and the number of invalid activities:")
-        print(results)
+        df = pd.DataFrame(results)
+        df.sort_values(by=1, inplace=True, ascending=False)
+        df.rename({0: "User ID", 1: "Invalid activities"}, axis=1, inplace=True)
+        print("")
+        print_result(result_df=df, filename="task_9")
 
     """
     10.Find the users who have tracked an activity in the Forbidden City of Beijing. ○ In this question you can consider the Forbidden City to have
@@ -405,6 +411,7 @@ class Part2:
     """
 
     def users_with_activity_in_beijing(self):
+        print_question(task_num=10, question_text="Users with tracked activity in the forbidden city Beijing:")
         pipeline = [{'$match': {
             'lat': {
                 '$gte': 39.916,
@@ -420,13 +427,10 @@ class Part2:
 
         result = self.tp_collection.aggregate(pipeline)
 
-        results = []
-
-        for row in list(result):
-            results.append(f"User {row['_id']} has trackpoints in the forbidden city\n")
-
-        print("Query 10 - Users with tracked activity in the forbidden city Beijing:")
-        print(results)
+        df = pd.DataFrame(list(result))
+        df.rename({"_id": "User ID"}, axis=1, inplace=True)
+        print("")
+        print_result(result_df=df, filename="task_10")
 
     """
     11.Find all users who have registered transportation_mode and their most used transportation_mode.
@@ -438,6 +442,7 @@ class Part2:
     """
 
     def user_transportation_mode(self):
+        print_question(task_num=11, question_text="Users with transportation mode registered and their most used transportation mode:")
         pipeline = {
             'transportation_mode': {
                 '$ne': None
@@ -477,5 +482,6 @@ class Part2:
             transportation_mode = max(transportation_modes, key=transportation_modes.get)
             results.append([user_id, transportation_mode])
 
-        print("Query 11 - Users with transportation mode registered and their most used transportation mode:")
-        print(results)
+        df = pd.DataFrame(results, columns=["User ID", "Transportation mode"])
+        print("")
+        print_result(result_df=df, filename="task_11")
