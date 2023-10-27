@@ -71,6 +71,18 @@ class Part2:
         for num in task_nums:
             tasks[num - 1]()
 
+        # Print the first 10 rows
+        user_10_docs = self.user_collection.find().limit(10)
+        activity_10_docs = self.activity_collection.find().limit(10)
+        trackpoint_10_docs = self.tp_collection.find().limit(10)
+
+        for doc in user_10_docs:
+            print(doc)
+        for doc in activity_10_docs:
+            print(doc)
+        for doc in trackpoint_10_docs:
+            print(doc)
+
     """
     Query 1: How many users, activities and trackpoints are there in the dataset (after it is inserted into the database).
     """
