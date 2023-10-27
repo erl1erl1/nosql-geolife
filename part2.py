@@ -16,10 +16,9 @@ def print_question(task_num: int, question_text: str, letter:str = ""):
     """
     print(f'Task {task_num}{letter}:')
     print(question_text)
-    print("Querying... Please wait.", end='')
 
 
-def print_result(result_df: pd.DataFrame or dict[str, list], floatfmt=".0f", filename=None):
+def print_result(result_df: pd.DataFrame or dict[str, list], floatfmt=".0f", filename="results.txt"):
     """
     Tabulates and prints the result table of a query
     Args:
@@ -469,9 +468,6 @@ class Part2:
             # Initialize transportation_mode dictionary
             if transportation_mode not in user_mode[user_id]:
                 user_mode[user_id][transportation_mode] = 0
-
-            # Count each transportation mode
-            #user_mode[user_id][transportation_mode] += 1
 
         # Sort the dictionary
         user_mode_sorted = sorted(user_mode.items())
