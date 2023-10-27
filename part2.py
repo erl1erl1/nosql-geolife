@@ -7,14 +7,14 @@ from datetime import datetime
 from haversine import haversine
 
 from database import DbConnector
-def print_question(task_num: int, question_text: str):
+def print_question(task_num: int, question_text: str, letter:str = ""):
     """
     Prints task introduction.
     Args:
         task_num: number of the task
         question_text: Text to display
     """
-    print(f'Task {task_num}:')
+    print(f'Task {task_num}{letter}:')
     print(question_text)
     print("Querying... Please wait.", end='')
 
@@ -184,7 +184,7 @@ class Part2:
     """
 
     def year_with_most_activities(self):
-        print_question(task_num=6, question_text=f"A: Most activities recorded in a year.")
+        print_question(task_num=6, question_text=f"Most activities recorded in a year.", letter="a")
         # Query 6a
         pipeline = [{'$group': {'_id': {'$year': '$start_date_time'},
                                 'count': {'$sum': 1}}},
@@ -216,7 +216,7 @@ class Part2:
         hours_year = hours_result[0]['_id']
         hours_sum = hours_result[0]['sum']
 
-        print_question(task_num=6, question_text=f"B: Most recorded hours were recorded in hours.")
+        print_question(task_num=6, question_text=f"Most recorded hours were recorded in hours.", letter="b")
 
         result = {
             "Year": [hours_year],
