@@ -46,3 +46,4 @@ class DbConnector:
                     del row['meta']
         
         collection.insert_many(batch)
+        

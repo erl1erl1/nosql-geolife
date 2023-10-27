@@ -111,7 +111,7 @@ def process_trackpoint(activity_id: int, trackpoint_row: pd.Series, user_id: str
         'lat': trackpoint_row['lat'],
         'lon': trackpoint_row['lon'],
         'altitude': trackpoint_row['alt'] if trackpoint_row['alt'] != -777 else None,
-        'date_days': trackpoint_row['date'],
-        'date_time': trackpoint_row['date_str'] + " " + trackpoint_row['time_str'],
+        'date_days': trackpoint_row['date'], 
+        'date_time': trackpoint_row['date_str'] + " " + trackpoint_row['time_str'], #TODO CAST TIL DATE!! 😘
         'user_id': user_id
     }
