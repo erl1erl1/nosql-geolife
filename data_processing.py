@@ -31,7 +31,7 @@ def process_users(path: str, labeled_ids: list) -> list:
         for user in users:
             if user.is_dir():
                 user_row = {
-                    "id": user.name,
+                    "_id": user.name,
                     "has_labels": user.name in labeled_ids,
                     "meta": {"path": user.path}
                 }
@@ -51,7 +51,7 @@ def preprocess_activities(user_row: dict) -> list:
         for activity in activities:
             if activity.is_file():
                 activity_row = {
-                    "id": int(activity.name[:-4] + user_row["id"]),
+                    "_id": int(activity.name[:-4] + user_row["id"]),
                     "user_id": user_row["id"],
                     "transportation_mode": None,
                     "meta": {"path": activity.path}

@@ -6,5 +6,5 @@ part1 = Part1()
 part1.upload_data()
 
 part2 = Part2()
-part2.execute_tasks(1)
+part2.execute_tasks(task_nums=range(1, 13))
 

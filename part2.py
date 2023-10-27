@@ -52,7 +52,7 @@ class Part2:
         self.activity_collection = self.db['activity']
         self.tp_collection = self.db['trackpoint']
 
-    def execute_tasks(self, task_nums: int or list[int]):
+    def execute_tasks(self, task_nums: int or list[int] or range):
         """
             Executes specified tasks based on provided task numbers.
 
