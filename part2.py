@@ -111,7 +111,7 @@ class Part2:
         user_pipeline = [
             {'$lookup': {
                 'from': 'activity',
-                'localField': 'id',
+                'localField': '_id',
                 'foreignField': 'user_id',
                 'as': 'activities'
             }},
@@ -252,10 +252,8 @@ class Part2:
                  "start_date_time": {"$gte": datetime(2008, 1, 1, 0, 0, 0)},
                  "end_date_time": {"$lt": datetime(2009, 1, 1, 0, 0, 0)}
                  }
-        projection = {"_id": 0,
-                  "id": 1}
 
-        activities_result = self.activity_collection.find(query, projection)
+        activities_result = self.activity_collection.find(query)
 
         activities_list = []
         for activity in activities_result:
@@ -394,9 +392,6 @@ class Part2:
 
             date_time_1 = trackpoints[index]['date_time']
             date_time_2 = trackpoints[index + 1]['date_time']
-            
-            date_time_1 = datetime.strptime(date_time_1, '%Y-%m-%d %H:%M:%S')
-            date_time_2 = datetime.strptime(date_time_2, '%Y-%m-%d %H:%M:%S')
 
             delta_date_time = date_time_2 - date_time_1
             if delta_date_time.seconds > 60 * 5:
@@ -417,7 +412,8 @@ class Part2:
         print_result(result_df=df, filename="task_9")
 
     """
-    10.Find the users who have tracked an activity in the Forbidden City of Beijing. ○ In this question you can consider the Forbidden City to have
+    10.Find the users who have tracked an activity in the Forbidden City of Beijing.
+    In this question you can consider the Forbidden City to have
     coordinates that correspond to: lat 39.916, lon 116.397.
     """
 
