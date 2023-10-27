@@ -1,0 +1,80 @@
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b92"),
+    id: Long("20090103012134135"),
+    user_id: '135',
+    transportation_mode: null,
+    start_date_time: ISODate("2009-01-03T01:21:34.000Z"),
+    end_date_time: ISODate("2009-01-03T05:40:31.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b93"),
+    id: Long("20090102043127135"),
+    user_id: '135',
+    transportation_mode: null,
+    start_date_time: ISODate("2009-01-02T04:31:27.000Z"),
+    end_date_time: ISODate("2009-01-02T04:41:05.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b94"),
+    id: Long("20090127030004135"),
+    user_id: '135',
+    transportation_mode: null,
+    start_date_time: ISODate("2009-01-27T03:00:04.000Z"),
+    end_date_time: ISODate("2009-01-27T04:50:32.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b95"),
+    id: Long("20090110011947135"),
+    user_id: '135',
+    transportation_mode: null,
+    start_date_time: ISODate("2009-01-10T01:19:47.000Z"),
+    end_date_time: ISODate("2009-01-10T04:42:47.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b96"),
+    id: Long("20090114121757135"),
+    user_id: '135',
+    transportation_mode: null,
+    start_date_time: ISODate("2009-01-14T12:17:57.000Z"),
+    end_date_time: ISODate("2009-01-14T12:30:53.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b97"),
+    id: Long("20090112014122135"),
+    user_id: '135',
+    transportation_mode: null,
+    start_date_time: ISODate("2009-01-12T01:41:22.000Z"),
+    end_date_time: ISODate("2009-01-12T02:14:01.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b98"),
+    id: Long("20081224144207135"),
+    user_id: '135',
+    transportation_mode: null,
+    start_date_time: ISODate("2008-12-24T14:42:07.000Z"),
+    end_date_time: ISODate("2008-12-24T15:26:45.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b99"),
+    id: Long("20081228103605135"),
+    user_id: '135',
+    transportation_mode: null,
+    start_date_time: ISODate("2008-12-28T10:36:05.000Z"),
+    end_date_time: ISODate("2008-12-28T12:19:32.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b9a"),
+    id: Long("20100215105635132"),
+    user_id: '132',
+    transportation_mode: null,
+    start_date_time: ISODate("2010-02-15T10:56:35.000Z"),
+    end_date_time: ISODate("2010-02-15T12:22:33.000Z")
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75b9b"),
+    id: Long("20100430233801132"),
+    user_id: '132',
+    transportation_mode: null,
+    start_date_time: ISODate("2010-04-30T23:38:01.000Z"),
+    end_date_time: ISODate("2010-05-01T00:35:31.000Z")
+  }

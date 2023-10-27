@@ -1,0 +1,101 @@
+
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df0"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.974294,
+    lon: 116.399741,
+    altitude: 492,
+    date_days: 39816.0566435185,
+    date_time: '2009-01-03 01:21:34',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df1"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.974292,
+    lon: 116.399592,
+    altitude: 492,
+    date_days: 39816.0566550926,
+    date_time: '2009-01-03 01:21:35',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df2"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.974309,
+    lon: 116.399523,
+    altitude: 492,
+    date_days: 39816.0566666667,
+    date_time: '2009-01-03 01:21:36',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df3"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.97432,
+    lon: 116.399588,
+    altitude: 492,
+    date_days: 39816.0566898148,
+    date_time: '2009-01-03 01:21:38',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df4"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.974365,
+    lon: 116.39973,
+    altitude: 491,
+    date_days: 39816.0567013889,
+    date_time: '2009-01-03 01:21:39',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df5"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.974391,
+    lon: 116.399782,
+    altitude: 491,
+    date_days: 39816.0567361111,
+    date_time: '2009-01-03 01:21:42',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df6"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.974426,
+    lon: 116.399735,
+    altitude: 491,
+    date_days: 39816.0567824074,
+    date_time: '2009-01-03 01:21:46',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df7"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.974458,
+    lon: 116.3997,
+    altitude: 491,
+    date_days: 39816.0568402778,
+    date_time: '2009-01-03 01:21:51',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df8"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.974491,
+    lon: 116.399732,
+    altitude: 490,
+    date_days: 39816.0568981481,
+    date_time: '2009-01-03 01:21:56',
+    user_id: '135'
+  },
+  {
+    _id: ObjectId("653a447dd7392f6db9d75df9"),
+    activity_id: Long("20090103012134135"),
+    lat: 39.97453,
+    lon: 116.399758,
+    altitude: 489,
+    date_days: 39816.0569560185,
+    date_time: '2009-01-03 01:22:01',
+    user_id: '135'
+  }s
