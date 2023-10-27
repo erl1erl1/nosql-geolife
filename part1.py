@@ -81,7 +81,7 @@ class Part1:
                 activity_buffer.append(activity)
 
                 for _, trackpoint_row in trackpoints_df.iterrows():
-                    trackpoint = process_trackpoint(activity['id'], trackpoint_row, user_row["id"])
+                    trackpoint = process_trackpoint(activity["_id"], trackpoint_row, user_row["_id"])
                     trackpoint_buffer.append(trackpoint)
 
                 num_activities, num_trackpoints = len(activity_buffer), len(trackpoint_buffer)
@@ -89,7 +89,7 @@ class Part1:
                     self.push_buffers_to_db(activity_buffer, trackpoint_buffer, num_activities, num_trackpoints)
 
             print(
-                f'\rUser {user_row["id"]} processed ({i + 1} / {num_users}), Time elapsed: {time_elapsed_str(start_time)}',
+                f'\rUser {user_row["_id"]} processed ({i + 1} / {num_users}), Time elapsed: {time_elapsed_str(start_time)}',
                 end='')
 
         self.push_buffers_to_db(activity_buffer, trackpoint_buffer, len(activity_buffer), len(trackpoint_buffer))

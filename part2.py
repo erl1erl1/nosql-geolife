@@ -259,7 +259,7 @@ class Part2:
 
         activities_list = []
         for activity in activities_result:
-            activities_list.append(activity['id'])
+            activities_list.append(activity['_id'])
 
         # Retrieve trackpoints for each activity id
         pipeline_2 = ({

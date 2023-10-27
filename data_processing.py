@@ -51,8 +51,8 @@ def preprocess_activities(user_row: dict) -> list:
         for activity in activities:
             if activity.is_file():
                 activity_row = {
-                    "_id": int(activity.name[:-4] + user_row["id"]),
-                    "user_id": user_row["id"],
+                    "_id": int(activity.name[:-4] + user_row["_id"]),
+                    "user_id": user_row["_id"],
                     "transportation_mode": None,
                     "meta": {"path": activity.path}
                 }
